@@ -50,12 +50,48 @@ class Decoded{
 		string regSource;
 		string regTemporary;
 		string regDestination;
-		int numberOfRegisters;
-		char instructionType;
+		string address;
+		int    immediate;
+		int    numberOfRegisters;
+		char   instructionType;
+		//Default Constructor
+		Decoded(){
+			
+		}
+		//R-type constructor
+		Decoded(string op, char type, string rs, string rt, string rd){
+			opCode = op;
+			instructionType = type;
+			regSource = rs;
+			regTemporary = rt;
+			regDestination = rd;
+		}
+		//I-type one register constructor and immediate or address
+		Decoded(string op, char type,string rs, int immed){
+			opCode = op;
+			instructionType = type;
+			regSource = rs;
+			immediate = immed;
+		}
+		//I-type one register constructor and  address
+		Decoded(string op, char type, string rs, string addrss){
+			opCode = op;
+			instructionType = type;
+			regSource = rs;
+			address = addrss;
+		}
+		//J-type constructor 
+		Decoded(string op, char type, string addrss){
+			opCode = op;
+			instructionType = type;
+			address = addrss;
+		}
+		
+		
 };
 class DecodedInstruction{
 	public:
-		Decoded * instuctions;
+		Decoded * instructions;
 		int instructionLine;
 		int maxCodeLines;
 		ifstream file;
@@ -66,90 +102,80 @@ class DecodedInstruction{
 			fileName = filename;
 			instructionLine = 0;
 			maxCodeLines = 200;
-			instuctions = new Decoded[200];
+			instructions = new Decoded[maxCodeLines];
 			fileName = filename;
 			//file.open(filename+".txt");
 		}
 		~DecodedInstruction(){
 			file.close();
-			delete[] instuctions;
+			delete[] instructions;
 		}
 		char InstructionType(string opcode){
-			switch (opcode) {
-			    // R-type instructions
-			    case "add":
-			    case "sub":
-			    case "mul":
-			    case "and":
-			    case "or":
-			    case "xor":
-			    case "slt":
+			
+			// R-type instructions uses three registers
+			if(opcode == "add"||
+			   opcode == "sub"||
+			   opcode == "mul"||
+			   opcode == "and"||
+			   opcode == "or" )
 			        return 'r';
-			        break;
 			
-			    // I-type instructions
-			    case "addi":
-			    case "andi":
-			    case "ori":
-			    case "xori":
-			    case "slti":
-			    case "li":
+			// I-type instructions uses two registers and immediate value
+			else if(opcode == "addi"||
+			    opcode == "andi"    ||
+			    opcode == "ori")
 			        return 'i';
-			        break;
-			
-			    // Memory instructions
-			    case "lw":
-			    case "sw":
-			        return 'm';
-			        break;
-			
-			    // Branch instructions
-			    case "beq":
-			    case "bne":
+			        
+			// I-type instructions uses one register and immediate 
+			else if(opcode == "li")
+			        return 'v';
+			        
+			// Branch instructions (J-type instructions) use two registers and address
+			else if(
+			    opcode == "beq"||
+			    opcode == "bne"||
+			    opcode == "bnez" )
 			        return 'b';
-			        break;
+			        
+			// I-type instructions uses one register and address 
+			else if(opcode == "la")
+			        return 'a';
 			
-			    // Jump instructions
-			    case "j":
-			    case "jal":
+			// Memory instructions(I-type instructions) uses two registers
+			else if(
+			    opcode == "lw"||
+			    opcode == "sw")
+			        return 'm';
+			
+			
+			
+			// Jump instructions (J-type instructions) use addresses
+			else if(
+			    opcode == "j"||
+			    opcode == "jal"||
+				opcode == "jr")
 			        return 'j';
-			        break;
 			
-			    // Load Upper Immediate
-			    case "lui":
-			        return 'u';
-			        break;
-			
-			    // Shift instructions
-			    case "sll":
-			    case "srl":
-			        return 's';
-			        break;
-			
-			    // Multiply and Divide instructions
-			    case "mult":
-			    case "div":
+			// Multiply and Divide instructions
+			else if(opcode == "mult"||
+			        opcode == "div")
 			        return 'q';
-			        break;
 			
-			    // System call
-			    case "syscall":
+			// System call
+			else if( opcode == "syscall")
 			        return 'y';
-			        break;
 			
-			    // Add more cases for other instructions as needed
+			// Add more cases for other instructions as needed
+			else
+			    return 'z';
 			
-			    default:
-			        // Handle default case, if necessary
-			        break;
-			}
 
     	}
 	
 		void readFile(){
 			string instruction;
-			string opCode,regSource,regTemp,regDest;
-			int numberOfRegisters;
+			string opCode,regSource,regTemp,regDest,addrss;
+			int numberOfRegisters,immed;
 			char instructionType;
 			
 			file.open(fileName+".txt");
@@ -159,20 +185,54 @@ class DecodedInstruction{
 						//cout<<instruction<<endl;
 				        stringstream inst(instruction);
 				        
-				        //The Code to Test Instruction Type
-				        string op = getline(inst,opCode,' ');
-				        string type = InstructionType(op);
-				        
-				        while(getline(inst,opCode,' ') && getline(inst,regSource,',') && getline(inst,regTemp, ',') && getline(inst,regDest, ',')){
-							cout<<opCode<<" "<<regSource<<" "<<regTemp<<" "<<regDest<<endl;
-						}
+				        while(getline(inst,opCode,' ')){
+						    cout<<opCode<<endl;
+						    char type = InstructionType(opCode);
+						    // R-type instructions uses three registers
+						    if(type == 'r'){
+						    	while(getline(inst,regSource,',') && getline(inst,regTemp, ',') && getline(inst,regDest, ',')){
+								     cout<<"\t"<<regSource<<" "<<regTemp<<" "<<regDest<<endl;
+								     Decoded temp(opCode,type,regSource,regTemp,regDest);
+								     instructions[instructionLine] = temp;
+								     instructionLine++;
+						        } 
+							}
+							// I-type instructions uses two registers
+							else if(type == 'i'){
+						    	while(getline(inst,regSource,',') && getline(inst,regTemp, ',') && getline(inst,regDest, ',')){
+								     immed = stoi(regDest);
+									 cout<<"\t"<<regSource<<" "<<regTemp<<" "<<immed<<endl;
+						        } 
+							}
+							// I-type instructions using one register and immediate or address
+							else if(type == 'v'){
+						    	while(getline(inst,regSource,',') && getline(inst,regTemp, ',') ){
+						    		immed = stoi(regTemp);
+								     cout<<"\t"<<regSource<<" "<<immed<<endl;
+						        } 
+							}
+							// Branch instructions (J-type instructions) use two registers and address
+			                else if(type == 'b'){
+						    	while(getline(inst,regSource,',') && getline(inst,regTemp, ',') && getline(inst,addrss, ',')){
+								     cout<<"\t"<<regSource<<" "<<regTemp<<" "<<addrss<<endl;
+						        } 
+							}
+							
+							// Jump instructions (J-type instructions) use addresses
+							else if(type == 'j'){
+						    	while(getline(inst,addrss, ' ')){
+								     cout<<opCode<<" "<<addrss<<endl;
+						        } 
+							}
+						
+				        }
 					}
 				}
 				else{
 					cout<<"The file is not good!!"<<endl;
 				}
 			}else{
-				cout<<"File failed to open"<<endl;
+				cout<<"File not found!!"<<endl;
 			}
 		}
 		
@@ -183,16 +243,6 @@ class DecodedInstruction{
 
 int main(){
 	DecodedInstruction * decode;
-	/*
-	ifstream file("code.txt");
-	string output;
-	
-	if(file.is_open()){
-   	  while(getline(file,output)){
-   	  	 cout<<output<<endl;
-      }
-   }
-   */
  main:
  	cout<<"Welcome To Processor Simulation"<<endl;
 	cout<<"1.Load File"<<endl;
