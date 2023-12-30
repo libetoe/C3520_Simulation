@@ -308,6 +308,9 @@ class DecodedInstruction{
 				
 			}
 		}
+		void performOperations(){
+			
+		}
 };
 
 
