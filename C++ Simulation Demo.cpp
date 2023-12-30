@@ -51,41 +51,82 @@ class Decoded{
 		string regTemporary;
 		string regDestination;
 		string address;
+		int    function;
 		int    immediate;
-		int    numberOfRegisters;
 		char   instructionType;
+		
 		//Default Constructor
 		Decoded(){
-			
+			opCode = "";
+			instructionType =' ';
+			regSource = "";
+			regTemporary = "";
+			regDestination = "";
+			function = 0;
+			address   = "";
 		}
 		//R-type constructor
-		Decoded(string op, char type, string rs, string rt, string rd){
+		Decoded(string op, char type, string rs, string rt, string rd, int func){
 			opCode = op;
 			instructionType = type;
 			regSource = rs;
 			regTemporary = rt;
 			regDestination = rd;
+			function = func;
+			
 		}
-		//I-type one register constructor and immediate or address
-		Decoded(string op, char type,string rs, int immed){
+		//I-type two registers constructor and immediate
+		Decoded(string op, char type,string rs,string rt, int immed){
+			opCode = op;
+			instructionType = type;
+			regSource = rs;
+			regTemporary = rt;
+			immediate = immed;
+			
+			
+		}
+		
+		//I-type one register constructor and  immediate
+		Decoded(string op, char type, string rs, int immed){
 			opCode = op;
 			instructionType = type;
 			regSource = rs;
 			immediate = immed;
+			
+		
 		}
-		//I-type one register constructor and  address
+		
+		// Branch instructions (J-type instructions) use two registers and address
+		Decoded(string op, char type, string rs,string rt, string addrss){
+			opCode = op;
+			instructionType = type;
+			regSource = rs;
+			regTemporary = rt;
+			address = addrss;
+			
+		}
+		
+		// I-type instructions uses one register and address
 		Decoded(string op, char type, string rs, string addrss){
 			opCode = op;
 			instructionType = type;
 			regSource = rs;
 			address = addrss;
+			
+			
 		}
-		//J-type constructor 
+		
+		// Jump instructions (J-type instructions) use addresses
 		Decoded(string op, char type, string addrss){
 			opCode = op;
 			instructionType = type;
 			address = addrss;
-		}
+        }
+        // System call
+        Decoded(string op, char type){
+			opCode = op;
+			instructionType = type;
+        }
 		
 		
 };
@@ -147,8 +188,6 @@ class DecodedInstruction{
 			    opcode == "sw")
 			        return 'm';
 			
-			
-			
 			// Jump instructions (J-type instructions) use addresses
 			else if(
 			    opcode == "j"||
@@ -186,42 +225,55 @@ class DecodedInstruction{
 				        stringstream inst(instruction);
 				        
 				        while(getline(inst,opCode,' ')){
-						    cout<<opCode<<endl;
+						    //cout<<opCode<<endl;
 						    char type = InstructionType(opCode);
 						    // R-type instructions uses three registers
 						    if(type == 'r'){
 						    	while(getline(inst,regSource,',') && getline(inst,regTemp, ',') && getline(inst,regDest, ',')){
-								     cout<<"\t"<<regSource<<" "<<regTemp<<" "<<regDest<<endl;
-								     Decoded temp(opCode,type,regSource,regTemp,regDest);
+								     //cout<<"\t"<<regSource<<" "<<regTemp<<" "<<regDest<<endl;
+								     Decoded temp(opCode,type,regSource,regTemp,regDest,1);
 								     instructions[instructionLine] = temp;
 								     instructionLine++;
 						        } 
 							}
-							// I-type instructions uses two registers
+							// I-type instructions uses two registers and immediate 
 							else if(type == 'i'){
 						    	while(getline(inst,regSource,',') && getline(inst,regTemp, ',') && getline(inst,regDest, ',')){
 								     immed = stoi(regDest);
-									 cout<<"\t"<<regSource<<" "<<regTemp<<" "<<immed<<endl;
+									 //cout<<"\t"<<regSource<<" "<<regTemp<<" "<<immed<<endl;
+									 
+									 Decoded temp(opCode,type,regSource,regTemp,immed);
+									 instructions[instructionLine] = temp;
+								     instructionLine++;
 						        } 
 							}
-							// I-type instructions using one register and immediate or address
+							// I-type instructions using one register and address
 							else if(type == 'v'){
 						    	while(getline(inst,regSource,',') && getline(inst,regTemp, ',') ){
-						    		immed = stoi(regTemp);
-								     cout<<"\t"<<regSource<<" "<<immed<<endl;
+						    		 immed = stoi(regTemp);
+								     //cout<<"\t"<<regSource<<" "<<immed<<endl;
+								     Decoded temp(opCode,type,regSource,immed);
+								     instructions[instructionLine] = temp;
+								     instructionLine++;
 						        } 
 							}
 							// Branch instructions (J-type instructions) use two registers and address
 			                else if(type == 'b'){
 						    	while(getline(inst,regSource,',') && getline(inst,regTemp, ',') && getline(inst,addrss, ',')){
-								     cout<<"\t"<<regSource<<" "<<regTemp<<" "<<addrss<<endl;
+								     //cout<<"\t"<<regSource<<" "<<regTemp<<" "<<addrss<<endl;
+								     Decoded temp(opCode,type,regSource,regTemp,addrss);
+								     instructions[instructionLine] = temp;
+								     instructionLine++;
 						        } 
 							}
 							
 							// Jump instructions (J-type instructions) use addresses
 							else if(type == 'j'){
 						    	while(getline(inst,addrss, ' ')){
-								     cout<<opCode<<" "<<addrss<<endl;
+								     //cout<<opCode<<" "<<addrss<<endl;
+								     Decoded temp(opCode,type,addrss);
+								     instructions[instructionLine] = temp;
+								     instructionLine++;
 						        } 
 							}
 						
@@ -236,7 +288,26 @@ class DecodedInstruction{
 			}
 		}
 		
-		
+		void showDecoded(){
+			for(int i = 0; i < instructionLine; i++){
+				if(instructions[i].instructionType  == 'r'){
+					cout<<instructions[i].opCode<<" "<<instructions[i].regSource<<","<<instructions[i].regTemporary<<","<<instructions[i].regDestination<<endl;
+				}
+				else if(instructions[i].instructionType  == 'i'){
+					cout<<instructions[i].opCode<<" "<<instructions[i].regSource<<","<<instructions[i].regTemporary<<","<<instructions[i].immediate<<endl;
+				}
+				else if(instructions[i].instructionType  == 'v'){
+					cout<<instructions[i].opCode<<" "<<instructions[i].regSource<<","<<instructions[i].immediate<<endl;
+				}
+				else if(instructions[i].instructionType  == 'b'){
+					cout<<instructions[i].opCode<<" "<<instructions[i].regSource<<","<<instructions[i].regTemporary<<","<<instructions[i].address<<endl;
+				}
+				else if(instructions[i].instructionType  == 'j'){
+					cout<<instructions[i].opCode<<" "<<instructions[i].address<<endl;
+				}
+				
+			}
+		}
 };
 
 
@@ -258,6 +329,7 @@ int main(){
 			cin>>filename;
 			decode = new DecodedInstruction(filename);
 			decode->readFile();
+			decode->showDecoded();
 			break;
 		case 2:
 			cout<<"2.Compile And Run"<<endl;
