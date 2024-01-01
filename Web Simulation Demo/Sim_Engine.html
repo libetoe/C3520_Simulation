@@ -11,7 +11,19 @@
   <body>
     
     <nav class="nav navbar-dark sticky-top bg-dark border-bottom border-light">
-        <a class="nav-link active" aria-current="page" href="#" style="color:white; font-weight: bold;" onclick="addFile()">Add File </a>
+        <!--input type="file" id="fileInput"-->
+        <!-- <a class="nav-link active" aria-current="page" href="#" style="color:white; font-weight: bold;" onclick="addFile()"> -->
+          <!--div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Dropdown button
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </div -->
+        <input type="file" id="upload-btn"> 
         <a class="nav-link" href="#" style="color:white; font-weight: bold;" onclick="compileAndRun()">Compile</a>
         <a class="nav-link" href="#" style="color:white; font-weight: bold;" onclick="exit()">Exit</a>
     </nav>
@@ -91,9 +103,9 @@
           <div class="form-group bg-dark ">
              <div class="nk-block-head-content">
                 <label for="exampleFormControlTextarea1" style="color:white;"><h4> Code Editor</h4></label>
-                
+                <!-- Example single danger button -->
              </div>
-              <textarea class="form-control rounded-0 bg-dark" id="exampleFormControlTextarea1" rows="20" style="color: white;font-weight: bold;"></textarea>
+              <textarea class="form-control rounded-0 bg-dark" id="text-area" rows="20" style="color: white;font-weight: bold;"></textarea>
               <a href="" class="btn btn-success" style="float: right;">Run</a>
           </div>
 
@@ -125,9 +137,10 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="../../assets/js/vendor/popper.min.js"></script>
+    
     <script src="../../dist/js/bootstrap.min.js"></script>
 
     <!-- Icons -->
@@ -137,6 +150,42 @@
     </script>
 
     <script>
+      // Get references to the button and textarea
+        const uploadBtn = document.getElementById('upload-btn');
+        const textArea = document.getElementById('text-area');
+
+        // Attach a click event listener to the button
+        uploadBtn.addEventListener('click', function() {
+            // Create a file input element and append it to the body
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.txt'; // Only accept text files
+            document.body.appendChild(fileInput);
+
+            // Attach a change event listener to the file input element
+            fileInput.addEventListener('change', function() {
+                // Check if a file is selected
+                if (fileInput.files.length > 0) {
+                    // Create a new FileReader instance
+                    const fileReader = new FileReader();
+
+                    // Attach a load event listener to the fileReader
+                    fileReader.addEventListener('load', function() {
+                        // Load the content of the selected file into the textarea
+                        textArea.value = fileReader.result;
+                    });
+
+                    // Read the selected file as text
+                    fileReader.readAsText(fileInput.files[0]);
+                }
+
+                // Remove the file input element from the body
+                document.body.removeChild(fileInput);
+            });
+
+            // Trigger the click event on the file input element
+            fileInput.click();
+        });
       function onSuccess() {
         alert('File added successfully.');
       }
