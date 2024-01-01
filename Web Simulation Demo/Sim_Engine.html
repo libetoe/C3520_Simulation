@@ -5,27 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>MIPS32 Simulation</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-
+    
 
   </head>
   <body>
     
     <nav class="nav navbar-dark sticky-top bg-dark border-bottom border-light">
-        <!--input type="file" id="fileInput"-->
-        <!-- <a class="nav-link active" aria-current="page" href="#" style="color:white; font-weight: bold;" onclick="addFile()"> -->
-          <!--div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown button
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </div -->
-        <input type="file" id="upload-btn"> 
+      <!--
         <a class="nav-link" href="#" style="color:white; font-weight: bold;" onclick="compileAndRun()">Compile</a>
         <a class="nav-link" href="#" style="color:white; font-weight: bold;" onclick="exit()">Exit</a>
+      -->
+        <button type="button" class="btn btn-dark  border-light" style="color:white; font-weight: bold; ">Compile</button>
+        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;">Exit</button>
+        
+        <a class="nav-link" href="#" style="color:white; font-weight: bold;" onclick="exit()">
+          <input type="file" id="upload-btn" name="fileInput">
+         </a --> 
     </nav>
 
 
@@ -102,11 +97,11 @@
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 bg-dark ">
           <div class="form-group bg-dark ">
              <div class="nk-block-head-content">
-                <label for="exampleFormControlTextarea1" style="color:white;"><h4> Code Editor</h4></label>
+                <label style="color:white;"><h4> Code Editor</h4></label>
                 <!-- Example single danger button -->
              </div>
               <textarea class="form-control rounded-0 bg-dark" id="text-area" rows="20" style="color: white;font-weight: bold;"></textarea>
-              <a href="" class="btn btn-success" style="float: right;">Run</a>
+              <a href="" class="btn btn-success" style="float: right;" onclick="run()">Run</a>
           </div>
 
           
@@ -115,8 +110,8 @@
     </div>
     <footer class="bg-primary text-white text-center text-lg-start">
          <div class="form-group bg-dark">
-              <label for="exampleFormControlTextarea1" ><h4> Console</h4></label>
-              <textarea class="form-control rounded-0 bg-dark" id="exampleFormControlTextarea1" rows="7" style="color: white;font-weight: bold;"></textarea>
+              <label ><h4> Console</h4></label>
+              <textarea class="form-control rounded-0 bg-dark" id="output" rows="7" style="color: white;font-weight: bold;"></textarea>
           </div>
 
         <!-- Copyright -->
@@ -129,20 +124,11 @@
 
 
 
-
-
-
-
-
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../../assets/js/vendor/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
     
-    <script src="../../dist/js/bootstrap.min.js"></script>
-
     <!-- Icons -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script>
@@ -153,6 +139,7 @@
       // Get references to the button and textarea
         const uploadBtn = document.getElementById('upload-btn');
         const textArea = document.getElementById('text-area');
+        const output = document.getElementById('output');
 
         // Attach a click event listener to the button
         uploadBtn.addEventListener('click', function() {
@@ -194,16 +181,15 @@
         alert('Failed to add file.');
       }
 
-      function addFile() {
-        google.script.run.withSuccessHandler(onSuccess).withFailureHandler(onFailure).addFile();
-      }
-
-      function compileAndRun() {
-        google.script.run.compileAndRun();
+      function Run() {
+        const textarea = document.getElementById("text-area");
+        //const lines = textarea.value.split("\n");
+        //console.log(textarea.value);
+        output.value = textarea.value;
       }
 
       function exit() {
-        google.script.host.close();
+        
       }
     </script>
 
