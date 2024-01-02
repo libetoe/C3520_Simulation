@@ -9,8 +9,8 @@
 </head>
 <body>
     <nav class="nav navbar-dark sticky-top bg-dark border-bottom border-light">
-        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold; ">Compile</button>
-        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;">Exit</button>
+        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;" onclick="compileAndRun()">Compile</button>
+        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;" onclick="resetRegisters()">Reset</button>
     </nav>
 
     <div class="container-fluid border border-light">
@@ -31,47 +31,8 @@
                                 <th scope="col">Value</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>$0</td>
-                                <td>0x0000</td>
-                              </tr>
-                              <tr>
-                                <td>$at</td>
-                                <td>0x0000</td>
-                              </tr>
-                              <tr>
-                                <td>$v0</td>
-                                <td>0x0000</td>
-                              </tr>
-                              <tr>
-                                <td>$v1</td>
-                                <td>0x0000</td>
-                              </tr>
-                              <tr>
-                                <td>$a0</td>
-                                <td>0x0000</td>
-                              </tr>
-                              <tr>
-                                <td>$a1</td>
-                                <td>0x0000</td>
-                              </tr>
-                              <tr>
-                                <td>$a2</td>
-                                <td>0x0000</td>
-                              </tr>
-                              <tr>
-                                <td>$t0</td>
-                                <td>0x0000</td>
-                              </tr>
-                              <tr>
-                                <td>$t1</td>
-                                <td>0x0000</td>
-                              </tr>
-                              <tr>
-                                <td>$t2</td>
-                                <td>0x0000</td>
-                              </tr>
+                        <tbody id="register-table-body">
+                            <!-- Register rows will be dynamically added here -->
                         </tbody>
                     </table>
                 </div>
@@ -83,7 +44,7 @@
                         <label><h4> Code Editor</h4></label>
                     </div>
                     <textarea class="form-control rounded-0 bg-dark" id="text-area" rows="20" style="color: white;font-weight: bold;"></textarea>
-                    <button class="btn btn-success" style="float: right;" id="execute-btn">Execute</button>
+                    <button class="btn btn-success" style="float: right;" id="execute-btn">Run</button>
                 </div>
             </main>
         </div>
