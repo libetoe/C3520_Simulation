@@ -37,13 +37,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Update register table after initializing the registers
     updateRegisterTable(registers);
-
+    let instructionLine = 0;
     const executeBtn = document.getElementById('execute-btn');
     const textArea = document.getElementById('text-area');
     const output = document.getElementById('output');
+    const step = document.querySelector('step');
+    const stop = document.querySelector('stop');
+    let programCounter;
 
     executeBtn.addEventListener('click', function () {
         executeCode();
+    });
+    
+    stop.addEventListener('click', function () {
+        stepExecution();
     });
 
     function executeCode() {
@@ -55,8 +62,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Execute each instruction
         for (let i = 0; i < instructions.length; i++) {
-            const instruction = instructions[i].trim();
-
+            programCounter = i;
+            const instruction = instructions[programCounter].trim();
+           
             if (instruction !== "") {
                 // Parse and execute the MIPS instruction
                 const result = executeInstruction(instruction, registers);
@@ -69,7 +77,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
-
+    function stepExecution(){
+        //document.getElementById("stop").style.background = "red";
+        stop.classList.replace("btn btn-outline-danger", "btn btn-outline-danger");
+    }
     function executeInstruction(instruction, registers) {
         // Split the instruction into parts
         const parts = instruction.split(' ');
