@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function executeCode() {
         const code = textArea.value;
         const instructions = code.split('\n');
+        const memomry;
 
         // Clear console
         output.value = "";
@@ -68,38 +69,54 @@ document.addEventListener('DOMContentLoaded', function () {
             const instruction = instructions[programCounter].trim();
            
             if (instruction !== "") {
-                // Parse and execute the MIPS instruction
-                const result = executeInstruction(instruction, registers);
+                //if (instruction == ".text"){
+                    // Parse and execute the MIPS instruction
+                    const result = executeInstruction(instruction, registers);
 
-                // Display the result in the output textarea
-                output.value += `Instruction ${i + 1}: ${instruction}\nResult: ${result}\n\n`;
+                    // Display the result in the output textarea
+                    output.value += `Instruction ${i + 1}: ${instruction}\nResult: ${result}\n\n`;
 
-                // Update the registers based on the executed instruction
-                updateRegisters(instruction, result, registers);
-                
+                    // Update the registers based on the executed instruction
+                    updateRegisters(instruction, result, registers);
+                //}
+
+                // else if(instruction == ".data"){
+                //     console.log("hello");
+                // }
             }
+
         }
     }
+
     function stepExecution(){
         const code = textArea.value;
         const instructions = code.split('\n');
         const instruction = instructions[programCounter].trim();
 
         if (instruction !== ""){
-            // Parse and execute the MIPS instruction
-                const result = executeInstruction(instruction, registers);
-            // Display the result in the output textarea
-                output.value += `Instruction ${programCounter + 1}: ${instruction}\nResult: ${result}\n\n`;
-            // Update the registers based on the executed instruction
-                updateRegisters(instruction, result, registers);
-            
-            currentInstruction = instruction;
-            document.getElementById('ir-value').value = currentInstruction;
-            document.getElementById('pc-value').value = '0x00'+(programCounter+1);
+            //if (instruction == ".text"){
+                // Parse and execute the MIPS instruction
+                    const result = executeInstruction(instruction, registers);
+                // Display the result in the output textarea
+                    output.value += `Instruction ${programCounter + 1}: ${instruction}\nResult: ${result}\n\n`;
+                // Update the registers based on the executed instruction
+                    updateRegisters(instruction, result, registers);
+                
+                currentInstruction = instruction;
+                document.getElementById('ir-value').value = currentInstruction;
+                document.getElementById('pc-value').value = '0x00'+(programCounter+1);
+                programCounter++;
+           // }
+            // else if(instruction == ".data"){
+            //     console.log("hello");
+            // }
 
         }
-        programCounter++;
+        
     }
+    // function reserveMemory(instruction){
+    //     const parts = instruction.split(' ');
+    // }
     function executeInstruction(instruction, registers) {
         // Split the instruction into parts
         const parts = instruction.split(' ');
