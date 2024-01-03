@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const result = executeInstruction(instruction, registers);
 
                 // Display the result in the output textarea
-                output.value += `Instruction ${i + 1}: ${instruction}\nResult: ${result}\n\n`;
+                output.value += `Instruction ${programCounter + 1}: ${instruction}\nResult: ${result}\n\n`;
 
                 // Update the registers based on the executed instruction
                 updateRegisters(instruction, result, registers);
