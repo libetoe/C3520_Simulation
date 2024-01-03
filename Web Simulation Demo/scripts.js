@@ -74,6 +74,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Update the registers based on the executed instruction
                 updateRegisters(instruction, result, registers);
+                // Increment the program counter to point to the next instruction
+                programCounter++;
             }
         }
     }
