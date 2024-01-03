@@ -9,10 +9,11 @@
 </head>
 <body>
     <nav class="nav navbar-dark sticky-top bg-dark border-bottom border-light">
-        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;" onclick="compileAndRun()">Compile</button>
+        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;" onclick="compileAndRun()">Run All</button>
         <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;" onclick="resetRegisters()">Reset</button>
         
-        <button type="button" class="btn btn-secondary btn-dark border-light" style="float:right;"><span class="bi-search">Step</span></button>
+        <button type="button" class="btn btn-secondary btn-dark border-light" style="float:right;"><span class="bi-search" style="color:white; font-weight: bold;">Step</span></button>
+        <button type="button" class="btn btn-secondary btn-dark border-light" style="float:right;"><span class="bi-search" style="color:white; font-weight: bold;">Stop</span></button>
 
     
     </nav>
@@ -44,7 +45,13 @@
 
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 bg-dark ">
                 <div class="form-group bg-dark">
-                     <div class="row g-gs">
+                     
+                    <div class="nk-block-head-content">
+                        <label><h4>Code Editor</h4></label>
+                    </div>
+                    <textarea class="form-control rounded-0 bg-dark" id="text-area" rows="20" style="color: white;font-weight: bold;"></textarea>
+                    <button class="btn btn-success btn-dark border-light" style="float: right; " id="execute-btn">Run</button>
+                    <div class="row g-gs">
                         <div class="col-md-6">
                             <div class="form-group">
                                         <label class="form-label" for="fva-full-name">
@@ -64,11 +71,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="nk-block-head-content">
-                        <label><h4>Code Editor</h4></label>
-                    </div>
-                    <textarea class="form-control rounded-0 bg-dark" id="text-area" rows="20" style="color: white;font-weight: bold;"></textarea>
-                    <button class="btn btn-success btn-dark border-light" style="float: right; " id="execute-btn">Run</button>
                 </div>
             </main>
         </div>
