@@ -83,6 +83,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 return executeADD(parts, registers);
             case "ADDI":
                 return executeADDI(parts, registers);
+            case "SUB":
+                return executeSUB(parts, registers)    
             case "LI":
                 return executeLI(parts, registers);
             // Add more cases for other MIPS instructions
@@ -133,6 +135,31 @@ document.addEventListener('DOMContentLoaded', function () {
             return "Invalid ADDI Instruction";
         }
     }
+
+    function executeSUB(parts, registers) {
+        if (parts.length === 4) {
+            const destReg = parts[1];
+            const reg1 = parts[2];
+            const reg2 = parts[3];
+    
+            const value1 = registers[reg1];
+            const value2 = registers[reg2];
+    
+            // Check if source registers contain NaN values
+            if (isNaN(value1) || isNaN(value2)) {
+                return "Invalid source register value in SUB instruction";
+            }
+    
+            // Simulate the SUB operation (you may need to handle overflow)
+            const result = value1 - value2;
+    
+            // Return the result
+            return result;
+        } else {
+            return "Invalid SUB Instruction";
+        }
+    }
+    
 
     function executeLI(parts, registers) {
         if (parts.length === 3) {
@@ -247,7 +274,7 @@ function checkSyntaxErrors(code) {
         if (line !== "") {
             const parts = line.split(' ');
             const instructionType = parts[0].toUpperCase();
-            if (instructionType !== "ADD" && instructionType !== "ADDI" && instructionType !== "LI" /* Add more valid instructions */) {
+            if (instructionType !== "ADD" && instructionType !== "ADDI" &&instructionType !== "SUB" && instructionType !== "LI" /* Add more valid instructions */) {
                 errors.push(`Syntax error in line ${i + 1}: Invalid MIPS instruction`);
             }
         }
