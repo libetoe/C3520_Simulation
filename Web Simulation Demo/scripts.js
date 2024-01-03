@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const output = document.getElementById('output');
     const step = document.querySelector('step');
     const stop = document.querySelector('stop');
-    let programCounter;
+    let programCounter = 0;
 
     executeBtn.addEventListener('click', function () {
         executeCode();
