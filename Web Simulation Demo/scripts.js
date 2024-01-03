@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function executeCode() {
         const code = textArea.value;
         const instructions = code.split('\n');
+        const memomry;
 
         // Clear console
         output.value = "";
@@ -76,8 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Update the registers based on the executed instruction
                 updateRegisters(instruction, result, registers);
-                // Increment the program counter to point to the next instruction
-                programCounter++;
+                
             }
         }
     }
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             currentInstruction = instruction;
             document.getElementById('ir-value').value = currentInstruction;
-            document.getElementById('pc-value').value = programCounter;
+            document.getElementById('pc-value').value = '0x00'+(programCounter+1);
 
         }
         programCounter++;
