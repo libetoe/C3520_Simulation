@@ -41,15 +41,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const executeBtn = document.getElementById('execute-btn');
     const textArea = document.getElementById('text-area');
     const output = document.getElementById('output');
-    const step = document.querySelector('step');
-    const stop = document.querySelector('stop');
+    const step = document.getElementById('step-btn');
+    const stop = document.getElementById('stop-btn');
     let programCounter = 0;
+    let currentInstruction;
+
 
     executeBtn.addEventListener('click', function () {
         executeCode();
     });
     
-    stop.addEventListener('click', function () {
+    step.addEventListener('click', function () {
         stepExecution();
     });
 
@@ -80,8 +82,24 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     function stepExecution(){
-        //document.getElementById("stop").style.background = "red";
-        stop.classList.replace("btn btn-outline-danger", "btn btn-outline-danger");
+        const code = textArea.value;
+        const instructions = code.split('\n');
+        const instruction = instructions[programCounter].trim();
+
+        if (instruction !== ""){
+            // Parse and execute the MIPS instruction
+                const result = executeInstruction(instruction, registers);
+            // Display the result in the output textarea
+                output.value += `Instruction ${programCounter + 1}: ${instruction}\nResult: ${result}\n\n`;
+            // Update the registers based on the executed instruction
+                updateRegisters(instruction, result, registers);
+            
+            currentInstruction = instruction;
+            document.getElementById('ir-value').value = currentInstruction;
+            document.getElementById('pc-value').value = programCounter;
+
+        }
+        programCounter++;
     }
     function executeInstruction(instruction, registers) {
         // Split the instruction into parts

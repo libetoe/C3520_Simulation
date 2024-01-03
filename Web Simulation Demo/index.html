@@ -9,12 +9,12 @@
 </head>
 <body>
     <nav class="nav navbar-dark sticky-top bg-dark border-bottom border-light">
-        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;" onclick="compileAndRun()">Run All</button>
-        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;" onclick="resetRegisters()">Reset</button>
         
-        <button type="button" class="btn btn-secondary btn-dark border-light" style="float:right;"><span class="bi-search" id="step" style="color:white; font-weight: bold;">Step</span></button>
-        <button type="button" class="btn btn-secondary btn-dark border-light" style="float:right;"><span class="bi-search" id="stop" style="color:white; font-weight: bold;">Stop</span></button>
-
+        <button class="btn btn-outline-dark border-light" data-mdb-ripple-init data-mdb-ripple-color="dark" id="run-all-btn" style="color: white;font-weight: bold;">Run All</button>
+        <button class="btn btn-outline-dark border-light" data-mdb-ripple-init data-mdb-ripple-color="dark"  id="reset-btn" style="color: white;font-weight: bold;">Reset</button>
+        <button type="button" class="btn btn-outline-dark border-light" data-mdb-ripple-init data-mdb-ripple-color="dark" id="step-btn" style="color: white;font-weight: bold;">Step</button>
+        <button class="btn btn-outline-dark border-light" data-mdb-ripple-init data-mdb-ripple-color="dark" id="stop-btn" style="color: white;font-weight: bold;">Stop</button>
+        
     
     </nav>
 
@@ -57,7 +57,7 @@
                                         <label class="form-label" for="fva-full-name">
                                         Program Counter </label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="fva-full-name" name="name" required readonly>
+                                    <input type="text" class="form-control" id="pc-value" name="name" required readonly value="ir-value">
                                 </div>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                                         <label class="form-label" for="fva-full-name">
                                         Instruction Register </label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="fva-full-name" name="name" required readonly>
+                                    <input type="text" class="form-control" id="ir-value" name="name" required readonly value="ir-value">
                                 </div>
                             </div>
                         </div>
