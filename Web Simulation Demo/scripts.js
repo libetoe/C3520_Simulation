@@ -60,6 +60,10 @@ document.addEventListener('DOMContentLoaded', function () {
         switch (instructionType) {
             case "ADD":
                 return executeADD(parts, registers);
+            case "ADDI":
+                return executeADDI(parts, registers);
+            case "LI":
+                return executeLI(parts, registers);
             // Add more cases for other MIPS instructions
             default:
                 return "Unsupported Instruction";
@@ -71,17 +75,56 @@ document.addEventListener('DOMContentLoaded', function () {
             const destReg = parts[1];
             const reg1 = parts[2];
             const reg2 = parts[3];
-
+    
             const value1 = registers[reg1];
             const value2 = registers[reg2];
-
+    
+            // Check if source registers contain NaN values
+            if (isNaN(value1) || isNaN(value2)) {
+                return "Invalid source register value in ADD instruction";
+            }
+    
             // Simulate the ADD operation (you may need to handle overflow)
             const result = value1 + value2;
-
+    
             // Return the result
             return result;
         } else {
             return "Invalid ADD Instruction";
+        }
+    }
+    
+
+    function executeADDI(parts, registers) {
+        if (parts.length === 4) {
+            const destReg = parts[1];
+            const sourceReg = parts[2];
+            const immediate = parseInt(parts[3], 10); // Parse the immediate value as an integer
+
+            const value1 = registers[sourceReg];
+
+            // Simulate the ADDI operation (you may need to handle overflow)
+            const result = value1 + immediate;
+
+            // Return the result
+            return result;
+        } else {
+            return "Invalid ADDI Instruction";
+        }
+    }
+
+    function executeLI(parts, registers) {
+        if (parts.length === 3) {
+            const destReg = parts[1];
+            const immediate = parseInt(parts[2], 10); // Parse the immediate value as an integer
+
+            // Load immediate value into the destination register
+            registers[destReg] = immediate;
+
+            // Return the loaded immediate value
+            return immediate;
+        } else {
+            return "Invalid LI Instruction";
         }
     }
 
@@ -183,7 +226,7 @@ function checkSyntaxErrors(code) {
         if (line !== "") {
             const parts = line.split(' ');
             const instructionType = parts[0].toUpperCase();
-            if (instructionType !== "ADD" /* Add more valid instructions */) {
+            if (instructionType !== "ADD" && instructionType !== "ADDI" && instructionType !== "LI" /* Add more valid instructions */) {
                 errors.push(`Syntax error in line ${i + 1}: Invalid MIPS instruction`);
             }
         }
