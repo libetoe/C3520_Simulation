@@ -1,0 +1,1 @@
+This is the Hohobe Group MIPS Simulator, a web-based application designed to simulate MIPS32 code. It currently serves as a prototype, featuring support for various Mips operations. The application was crafted using a combination of HTML, CSS, JavaScript, and Bootstrap
