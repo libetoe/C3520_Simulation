@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const textArea = document.getElementById('text-area');
     const output = document.getElementById('output');
     const step = document.getElementById('step-btn');
-    const stop = document.getElementById('stop-btn');
+    const resetBtn = document.getElementById('reset-btn');
     const runall = document.getElementById('run-all-btn');
     
     let programCounter = 0;
@@ -64,6 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     executeBtn.addEventListener('click', function () {
         executeCode();
+    });
+
+    resetBtn.addEventListener('click', function () {
+        reset();
     });
 
     runall.addEventListener('click', function () {
@@ -175,10 +179,10 @@ document.addEventListener('DOMContentLoaded', function () {
     function executeInstruction(instruction, registers) {
         // Split the instruction into parts
         const parts = instruction.split(' ');
-
+    
         // Determine the instruction type
         const instructionType = parts[0].toUpperCase();
-
+    
         // Execute the corresponding MIPS instruction
         switch (instructionType) {
             case "ADD":
@@ -186,9 +190,11 @@ document.addEventListener('DOMContentLoaded', function () {
             case "ADDI":
                 return executeADDI(parts, registers);
             case "SUB":
-                return executeSUB(parts, registers)    
+                return executeSUB(parts, registers);
             case "LI":
                 return executeLI(parts, registers);
+            case "JR":
+                return executeJR(parts, registers);
             // Add more cases for other MIPS instructions
             case ".TEXT":
                 return "Code Section";
@@ -196,6 +202,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 return "Data Declarations Section";
             default:
                 return "Unsupported Instruction";
+        }
+    }
+
+
+    function executeJR(parts, registers) {
+        if (parts.length === 2) {
+            const sourceReg = parts[1];
+            const jumpAddress = registers[sourceReg];
+    
+            // Jump to the address stored in the specified register
+            // we'll just log the jump address
+            console.log(`Jumping to address: 0x${jumpAddress.toString(16).toUpperCase()}`);
+            
+            return "Jump instruction executed";
+        } else {
+            return "Invalid JR Instruction";
         }
     }
 
@@ -285,12 +307,17 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateRegisters(instruction, result, registers) {
         // Extract the destination register(s) from the instruction
         const destRegisters = extractDestinationRegisters(instruction);
-
+    
         // Update the specified register(s) with the result of the instruction
         destRegisters.forEach(destRegister => {
-            registers[destRegister] = result;
+            // Update $ra separately
+            if (destRegister === "$ra") {
+                registers[destRegister] = result;
+            } else {
+                registers[destRegister] = result;
+            }
         });
-
+    
         // Update the register table in the sidebar
         updateRegisterTable(registers);
     }
@@ -327,6 +354,8 @@ document.addEventListener('DOMContentLoaded', function () {
             tableBody.appendChild(row);
         }
     }
+
+    reset();
 });
 
 function compileAndRun() {
@@ -346,7 +375,7 @@ function compileAndRun() {
     }
 }
 
-function resetRegisters() {
+/*function resetRegisters() {
     // Implement reset functionality
     // This function will be called when the "Reset" button is clicked
     const registers = {
@@ -387,7 +416,30 @@ function resetRegisters() {
     document.getElementById('output').value = "";
     // Update register table
     updateRegisterTable(registers);
+}*/
+
+
+
+function resetRegisters(registers) {
+    // Reset each register to its default value
+    for (const register in registers) {
+        registers[register] = 0x0000;
+    }
+
+    // Update the register table in the sidebar
+    updateRegisterTable(registers);
 }
+
+
+function reset() {
+    // Clear console
+    document.getElementById('output').value = "";
+
+    // Pass the existing registers object to resetRegisters
+    resetRegisters(registers);
+}
+
+
 
 function checkSyntaxErrors(code) {
     // Implement syntax error checking logic
