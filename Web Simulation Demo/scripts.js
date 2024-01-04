@@ -195,6 +195,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 return executeLI(parts, registers);
             case "JR":
                 return executeJR(parts, registers);
+            case "SYSCALL":
+                // Implement syscall functionality (e.g., handle system calls)
+                return executeSyscall(registers);
             // Add more cases for other MIPS instructions
             case ".TEXT":
                 return "Code Section";
@@ -203,6 +206,27 @@ document.addEventListener('DOMContentLoaded', function () {
             default:
                 return "Unsupported Instruction";
         }
+    }
+
+
+    function executeSyscall(registers) {
+        // Implement syscall functionality here
+        // You can use the value in $v0 register to determine the syscall type
+        const syscallType = registers["$v0"];
+    
+        switch (syscallType) {
+            case 10:
+                // Exit program syscall
+                console.log("Program exit syscall");
+                break;
+            // Add more cases for other syscalls
+            default:
+                console.log("Unsupported syscall");
+                break;
+        }
+    
+        // Return a message indicating the syscall was executed
+        return "Syscall executed";
     }
 
 
@@ -440,11 +464,11 @@ function reset() {
 }
 
 
-
 function checkSyntaxErrors(code) {
     // Implement syntax error checking logic
     // This function should return an array of error messages or an empty array if no errors
     const errors = [];
+    let textSection = false;  // Track if the current section is .text
     // Add your syntax error checking logic here
     // Example: Check if each line has a valid MIPS instruction syntax
     const lines = code.split('\n');
@@ -453,8 +477,43 @@ function checkSyntaxErrors(code) {
         if (line !== "") {
             const parts = line.split(' ');
             const instructionType = parts[0].toUpperCase();
-            if (instructionType !== "ADD" && instructionType !== "ADDI" &&instructionType !== "SUB" && instructionType !== "LI" /* Add more valid instructions */) {
-                errors.push(`Syntax error in line ${i + 1}: Invalid MIPS instruction`);
+
+            if (instructionType === ".TEXT") {
+                textSection = true;
+            } else if (instructionType === ".DATA") {
+                textSection = false;
+            }
+
+            if (textSection) {
+                switch (instructionType) {
+                    case "ADD":
+                    case "ADDI":
+                    case "SUB":
+                    case "LI":
+                    case "JR":
+                    case "J":
+                    case "JAL":
+                        // Valid instructions
+                        break;
+
+                    case "SW":
+                        // Syntax check for SW
+                        if (parts.length !== 3 || !parts[1].startsWith("$") || !parts[2].includes("(") || !parts[2].endsWith(")")) {
+                            errors.push(`Syntax error in line ${i + 1}: Invalid SW syntax`);
+                        }
+                        break;
+
+                    case "LW":
+                        // Syntax check for LW
+                        if (parts.length !== 3 || !parts[1].startsWith("$") || !parts[2].includes("(") || !parts[2].endsWith(")")) {
+                            errors.push(`Syntax error in line ${i + 1}: Invalid LW syntax`);
+                        }
+                        break;
+
+                    default:
+                        errors.push(`Syntax error in line ${i + 1}: Invalid MIPS instruction`);
+                        break;
+                }
             }
         }
     }
