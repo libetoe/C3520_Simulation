@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MIPS32 Simulation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+
+  </head>
+  <body>
+    
+    <nav class="nav navbar-dark sticky-top bg-dark border-bottom border-light">
+      <!--
+        <a class="nav-link" href="#" style="color:white; font-weight: bold;" onclick="compileAndRun()">Compile</a>
+        <a class="nav-link" href="#" style="color:white; font-weight: bold;" onclick="exit()">Exit</a>
+      -->
+        <button type="button" class="btn btn-dark  border-light" style="color:white; font-weight: bold; ">Compile</button>
+        <button type="button" class="btn btn-dark border-light" style="color:white; font-weight: bold;">Exit</button>
+        
+        <a class="nav-link" href="#" style="color:white; font-weight: bold;" onclick="exit()">
+          <input type="file" id="upload-btn" name="fileInput">
+         </a --> 
+    </nav>
+
+
+    <div class="container-fluid border border-light">
+      <div class="row " >
+        <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
+
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active bold" href="#">
+                    <h6 style="color:white; font-weight: bold;">REGISTER FILE</h6>
+                </a>
+              </li>
+
+              
+            </ul>
+              <table class="table table-dark  ">
+                <thead>
+                  <tr>
+                    <th scope="col">Register</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>$0</td>
+                    <td>0x0000</td>
+                  </tr>
+                  <tr>
+                    <td>$at</td>
+                    <td>0x0000</td>
+                  </tr>
+                  <tr>
+                    <td>$v0</td>
+                    <td>0x0000</td>
+                  </tr>
+                  <tr>
+                    <td>$v1</td>
+                    <td>0x0000</td>
+                  </tr>
+                  <tr>
+                    <td>$a0</td>
+                    <td>0x0000</td>
+                  </tr>
+                  <tr>
+                    <td>$a1</td>
+                    <td>0x0000</td>
+                  </tr>
+                  <tr>
+                    <td>$a2</td>
+                    <td>0x0000</td>
+                  </tr>
+                  <tr>
+                    <td>$t0</td>
+                    <td>0x0000</td>
+                  </tr>
+                  <tr>
+                    <td>$t1</td>
+                    <td>0x0000</td>
+                  </tr>
+                  <tr>
+                    <td>$t2</td>
+                    <td>0x0000</td>
+                  </tr>
+                </tbody>
+              </table>
+            
+          </div>
+
+        </nav>
+
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 bg-dark ">
+          <div class="form-group bg-dark ">
+             <div class="nk-block-head-content">
+                <label style="color:white;"><h4> Code Editor</h4></label>
+                <!-- Example single danger button -->
+             </div>
+              <textarea class="form-control rounded-0 bg-dark" id="text-area" rows="20" style="color: white;font-weight: bold;"></textarea>
+              <a href="" class="btn btn-success" style="float: right;" onclick="run()">Run</a>
+          </div>
+
+          
+        </main>
+      </div>
+    </div>
+    <footer class="bg-primary text-white text-center text-lg-start">
+         <div class="form-group bg-dark">
+              <label ><h4> Console</h4></label>
+              <textarea class="form-control rounded-0 bg-dark" id="output" rows="7" style="color: white;font-weight: bold;"></textarea>
+          </div>
+
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+          © 2023 Copyright:
+          <a class="text-white" href="https://mdbootstrap.com/">HohobeGroup</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script>
+      feather.replace()
+    </script>
+
+    <script>
+      // Get references to the button and textarea
+        const uploadBtn = document.getElementById('upload-btn');
+        const textArea = document.getElementById('text-area');
+        const output = document.getElementById('output');
+
+        // Attach a click event listener to the button
+        uploadBtn.addEventListener('click', function() {
+            // Create a file input element and append it to the body
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = '.txt'; // Only accept text files
+            document.body.appendChild(fileInput);
+
+            // Attach a change event listener to the file input element
+            fileInput.addEventListener('change', function() {
+                // Check if a file is selected
+                if (fileInput.files.length > 0) {
+                    // Create a new FileReader instance
+                    const fileReader = new FileReader();
+
+                    // Attach a load event listener to the fileReader
+                    fileReader.addEventListener('load', function() {
+                        // Load the content of the selected file into the textarea
+                        textArea.value = fileReader.result;
+                    });
+
+                    // Read the selected file as text
+                    fileReader.readAsText(fileInput.files[0]);
+                }
+
+                // Remove the file input element from the body
+                document.body.removeChild(fileInput);
+            });
+
+            // Trigger the click event on the file input element
+            fileInput.click();
+        });
+      function onSuccess() {
+        alert('File added successfully.');
+      }
+
+      function onFailure() {
+        alert('Failed to add file.');
+      }
+
+      function Run() {
+        const textarea = document.getElementById("text-area");
+        //const lines = textarea.value.split("\n");
+        //console.log(textarea.value);
+        output.value = textarea.value;
+      }
+
+      function exit() {
+        
+      }
+    </script>
+
+
+</body>
+</html>

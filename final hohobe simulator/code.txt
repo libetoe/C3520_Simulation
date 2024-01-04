@@ -1,0 +1,10 @@
+.data
+var1: .word 3
+array1: .byte 'a','b'
+array2: .space 40
+.text
+li $t0, 90
+li $t1, 70
+li $t2, 40
+add $t0, $t0, $t1
+add $t2, $t1, $t1

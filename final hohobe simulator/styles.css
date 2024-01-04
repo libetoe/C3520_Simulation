@@ -1,0 +1,72 @@
+/* Add your existing styles here */
+
+body {
+    background-color: #343a40;
+    color: #fff;
+}
+
+.navbar-dark {
+    background-color: #343a40;
+}
+
+.sidebar {
+    padding-top: 15px;
+}
+
+.sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
+.table th,
+.table td {
+    border-top: none;
+}
+
+.bg-dark,
+.btn-dark,
+.table-dark,
+.footer {
+    background-color: #343a40 !important;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+textarea,
+code {
+    font-family: 'Courier New', monospace;
+}
+
+#register-table-body {
+    overflow: auto;
+    display: block;
+    height: 575px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enables vertical scrolling */
+    overflow-x: hidden; /* Hides horizontal scrollbar */
+}
+.table {
+    width: 100%; /* Adjust width as needed */
+    table-layout: fixed; /* Keeps the table layout consistent */
+}
+
+thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Optional, but helpful for maintaining the layout */
+}
+
+tbody {
+    display: block;
+    height: 200px; /* Adjust height as needed for scrolling */
+    overflow-y: auto;
+}
+/* Add new styles if needed */
